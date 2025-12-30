@@ -1,10 +1,10 @@
-# GLTF Model & Animation Preview
+<p align="center">
+  <img src="assets/branding/logo.png" alt="GLTF Model & Animation Preview" width="200">
+</p>
+
+## GLTF Model & Animation Preview
 
 A lightweight 3D model viewer built with [Bevy](https://bevyengine.org/) for previewing GLTF/GLB models and their animations.
-
-![Bevy](https://img.shields.io/badge/Bevy-0.17.3-232326?logo=bevy&logoColor=white)
-![Rust](https://img.shields.io/badge/Rust-2024-orange?logo=rust)
-![License](https://img.shields.io/badge/License-MIT-blue)
 
 ## Features
 

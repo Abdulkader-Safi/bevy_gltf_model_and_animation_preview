@@ -3,9 +3,11 @@ mod resources;
 mod systems;
 mod ui;
 
-use bevy::{asset::UnapprovedPathMode, prelude::*};
+use bevy::{asset::UnapprovedPathMode, prelude::*, winit::WinitWindows};
 use bevy_file_dialog::prelude::*;
 use bevy_panorbit_camera::PanOrbitCameraPlugin;
+use std::io::Cursor;
+use winit::window::Icon;
 
 use components::GltfModelFile;
 use resources::{ModelViewer, PanelDragState};
@@ -41,7 +43,7 @@ fn main() {
         .add_plugins(FileDialogPlugin::new().with_load_file::<GltfModelFile>())
         .init_resource::<ModelViewer>()
         .init_resource::<PanelDragState>()
-        .add_systems(Startup, (setup_scene, setup_ui))
+        .add_systems(Startup, (setup_scene, setup_ui, set_window_icon))
         .add_systems(
             Update,
             (
@@ -58,4 +60,24 @@ fn main() {
             ),
         )
         .run();
+}
+
+fn set_window_icon(windows: Option<NonSend<WinitWindows>>) {
+    let Some(windows) = windows else {
+        return;
+    };
+
+    let icon_bytes = include_bytes!("../assets/branding/logo.png");
+    let Ok(icon_image) = image::load(Cursor::new(icon_bytes), image::ImageFormat::Png) else {
+        return;
+    };
+    let icon_image = icon_image.into_rgba8();
+    let (width, height) = icon_image.dimensions();
+    let Ok(icon) = Icon::from_rgba(icon_image.into_raw(), width, height) else {
+        return;
+    };
+
+    for window in windows.windows.values() {
+        window.set_window_icon(Some(icon.clone()));
+    }
 }
